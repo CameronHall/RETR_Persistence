@@ -1,11 +1,10 @@
 lrm_player_uids = [];
-
-"lrm_uid_pveh"  addpublicvariableeventhandler {
+"lrm_uid_pveh"  addPublicVariableEventHandler {
 	private "_uid";
 	_uid = _this select 1;
 
-	if (!(_uid in lrm_player_uids)) then {
+	if !(_uid in lrm_player_uids) then {
 		lrm_player_uids = lrm_player_uids + [_uid];
-		publicvariable "lrm_player_uids";
+		publicVariable "lrm_player_uids";
 	};
 };
