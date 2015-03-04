@@ -5,6 +5,7 @@
 * Output: Saves above to profileNamespace
 */
 if !(isServer) exitWith {diag_log "This function is designed for servers only."};
+private ['_persistenceData','_varNames','_loadData','_missionIntro','_missionAuthor','_missionLoadName','_argsArray',];
 _persistenceData = profileNamespace getVariable "RETR_persistence";
 _varNames = ["mission","serverSalt","hash","date"];
 _loadData = "";
@@ -27,15 +28,19 @@ _missionIntro = getText(missionConfigFile >> "onLoadIntro");
 _missionLoadName = getText(missionConfigFile >> "onLoadName");
 _missionAuthor = getText(missionConfigFile >> "author");
 _missionDataCurrent = [_missionName,_missionIntro,_missionLoadName,_missionAuthor,_playerUID];
-_argArray = [_missionData, serverSalt, serverHash, date];
+_argsArray = [_missionData, serverSalt, serverHash, date];
 
 //If no data has been saved 
 if (!_loadData) then {
 	//Data to save
-	waitUntil{!isNil "serverSalt"};
-	for "_i" from 0 to (count _argArray) -2 do {
+	serverSalt = floor(random 1000);
+	serverHash = ceil(random 1000);
+	publicVariable "serverSalt";
+	publicVariable "serverHash"
+	waitUntil{!isNil ("serverSalt" && "serverHash");};
+	for "_i" from 0 to (count _argsArray) -2 do {
 		_persistenceVarX = _persistenceData select _i;
-		profileNamespace setVariable [_persistenceVarX,_argArray select _i];
+		profileNamespace setVariable [_persistenceVarX,_argsArray select _i];
 	};
 } else {//If data exists then load it
 	if(_missionDataCurrent != _missionData) then {
