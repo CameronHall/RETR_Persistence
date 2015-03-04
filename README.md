@@ -1,12 +1,15 @@
-#Nomad
+#RETR_Persistence (Nomad's successor)
 =====
 ##
 ArmA 3 Persistence
+ - Nomad from the ground up.
 
-###Changes from original
- - Moved dependance of **'missionNameSpace'** to **'profileNameSpace'**.
+###What does it do?
+ - Saves player data to **'profileNameSpace'**.
+ - Data is hashed to prevent tampering.
+ -
 
-###WIP
- - Re-implementing medical state peristence. Currently awaiting CSE setAllVars function.
- - <sup>Persistence...</sup>
+###To do list...
+ - Test it
+
  
