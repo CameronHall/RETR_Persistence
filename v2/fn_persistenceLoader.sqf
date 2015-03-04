@@ -6,6 +6,8 @@
 */
 _persistenceVarName = toArray(format["RETR_persitance_%1",getPlayerUID]);
 _persistenceData = profileNamespace getVariable _persistenceVarName;
+_varNames = ["Position","Gear","Settings","Group","Vehicle","Medical","Hash"];
+
 if(isNil _persistenceData) exitWith {
 	diag_log format["%1 has no persitance data available for the current mission",name player];
 	call RETR_fnc_persistenceSaver;
@@ -23,13 +25,34 @@ if (_persitanceData select 0 != _authenticationData) exitWith {
 	diag_log format["Invalid Persitance Data Loaded, %1 loaded the following data %2", name player, _authenticationDataString];
 	call RETR_fnc_persistenceSaver;
 };
-	_positionData = call compile toString(reverse _persitanceData select 1);
-	_gearData = call compile toString(reverse _persitanceData select 2);
-	_settingsData = call compile toString(reverse _persitanceData select 3);
-	_groupData = call compile toString(reverse _persitanceData select 4);
-	_medicalStateData = call compile toString(_persitanceData select 5);
-	_vehicleData = call compile toString(reverse _persitanceData select 6);
+_isHashOn = _this select 0 find 'Hash' != -1;
+if(_runningHash) then {
+	missionNamespace setVariable ['_savingHash',true];
+	missionNamespace setVariable ['_hashDataNew', []];
+	missionNamespace setVariable ['_hashDataCompare', (_persistenceData select) select _isHashOn];
+	missionNamespace setVariable ['_hashDataNew',[]];
+} else {
+	missionNamespace setVariable ['_savingHash',false];	
+};
 
+//Lazier way to define variables
+for "_i" from 0 to (count _this select 0) -2} do {
+	if (isNil _this select _i) then {// In case no arguments are defined when the script is called eg. call RETR_fnc_persistenceSaver
+		_savingX = format["_saving%1",_this select _i];
+		missionNamespace setVariable [_tmp, _this select _i];
+	};
+	_xData = format["_%1Data",toLower _this select _i];
+	missionNamespace setVariable [_tmp, call compile _persistenceData select _i];
+	if(!isNil _xData && (_savingHash)) then {
+		_hashPart = [_xData, serverHash] call RETR_fnc_dataHash;
+		_hashDataNew pushBack _hashPart;
+	};
+};
+
+if (_hashDataCompare != _hashDataNew) exitWith {
+	profileNamespace setVariable [_persistenceData,nil];
+	diag_log format["%1's persistence data has been tampered with. \n Resetting %1's persitence data.", name player];
+};
 	_hashCheck1 = _positionData select 3;
 	_hashCheck2 = _gearData select (count _vehicleData - 1);
 	_hashCheck3 = _settingsData select 2
@@ -39,7 +62,7 @@ if (_persitanceData select 0 != _authenticationData) exitWith {
 };
 if((_hashCheck1 && _hashCheck2 && _hashCheck3 && _hashcheck4 && _hashCheck5 && _hashCheck6) != _playerUID) exitWith {
 	profileNamespace setVariable [_persistenceData,nil];
-	diag_log format["%1's persistance data has been tampered with. \n Restting %1's persistence data.", name player];
+	diag_log format["%1's persistence data has been tampered with. \n Restting %1's persistence data.", name player];
 	call RETR_fnc_persistenceSaver;
 };
 	_positionData = [_positionData select 0, _positionData select 1, _positionData select 2];
