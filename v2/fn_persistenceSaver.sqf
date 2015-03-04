@@ -33,9 +33,10 @@ _missionIntro = getText(missionConfigFile >> "onLoadIntro");
 _missionLoadName = getText(missionConfigFile >> "onLoadName");
 _missionAuthor = getText(missionConfigFile >> "author");
 _playerUID = (getPlayerUID player); 
+_missionCheck = _persistenceVarName select 0;
 //Data to save
 with profileNamespace do {
-	_persistenceVarName select 0 = toArray str[_missionName,_missionIntro,_missionLoadName,_missionAuthor,_playerUID];
+	_missionCheck = toArray str[_missionName,_missionIntro,_missionLoadName,_missionAuthor,_playerUID];
 };
 //Data collection loops
 while {_savingPosition} do {
@@ -105,7 +106,7 @@ while {true} do {
 			_count = count _xData;
 		};
 	};
-	_count = [_persistenceVarName,_count];
+	/*_count = [_persistenceVarName,_count];
 	_cVar = find [_persistenceVarName];
 	if(_cVar == -1) then {
 		RETR_persitance_server pushBack [_persistenceVarName,_count]
@@ -114,7 +115,7 @@ while {true} do {
 		_cVar = (RETR_persitance_server select _cVar) select 1;
 		RETR_persitance_server set[_cVar,_count];
 		publicVariable "RETR_persitance_server";
-	};
+	};*/
 };
 
 
