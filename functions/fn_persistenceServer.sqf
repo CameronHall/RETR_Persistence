@@ -1,10 +1,11 @@
 /*
 * @function RETR_fnc_persistenceServer
 * @author CameronHall "Retra"
+* @args none
 * Input: Static defined vars, ["mission","serverSalt","hashData","date"] 
 * Output: Saves above to profileNamespace
 */
-if !(isServer) exitWith {diag_log "This function is designed for servers only."};
+if !(isServer) exitWith {diag_log "[Persistence] - This function is designed for servers only.";};
 private ['_persistenceData','_varNames','_loadData','_missionIntro','_missionAuthor','_missionLoadName','_argsArray',];
 _persistenceData = profileNamespace getVariable "RETR_persistence";
 _varNames = ["mission","serverSalt","hash","date"];
@@ -12,13 +13,14 @@ _loadData = "";
 if (isNil _persistenceData) then {//RETR_perstistence has never been run
 	profileNameSpace setVariable ["RETR_persitenceServer",_varNames];
 	for "_i" from 0 to (count _persistenceData) -1 do {
-		_xData = format["_%1Data",toLower _varNames select _i];
+		private "_xData";
+		_xData = format["_%1Data", _varNames select _i];
 		missionNamespace setVariable [_xData,[]];
 	};
 	_loadData = false;
 } else { //RETR_persistence has been run
 	for "_i" from 0 to (count _persistenceData) -1 do {//Fetch data
-		_xData = format["_%1Data",toLower _varNames select _i];
+		_xData = format["_%1Data", _varNames select _i];
 		missionNamespace setVariable [_xData,profileNamespace getVariable "RETR_persistence" select _i];
 	};
 	_loadData = true;
@@ -43,8 +45,10 @@ if (!_loadData) then {
 		profileNamespace setVariable [_persistenceVarX,_argsArray select _i];
 	};
 } else {//If data exists then load it
-	if(_missionDataCurrent != _missionData) then {
-		profileNamespace setVariable ["RETR_persistence",nil];
+	//If data is not for the current mission then delete saved data and restart the function
+	if(_missionDataCurrent != _missionData) exitWith {
+		profileNameSpace setVariable ["RETR_persitenceServer",nil];
+		call RETR_fnc_persistenceServer;
 	};
 	serverSalt = _serverSaltData;
 	publicVariable "serverSalt";
