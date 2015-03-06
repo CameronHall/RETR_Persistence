@@ -8,7 +8,7 @@
 private ["_results", "_input", "_secret"];
 _results = [1,1,1,1,1,1,1,1];
 
-_input = _input;
+_input = _this select 0;
 _secret = _this select 1;
 _slen = count secret;
 
@@ -17,7 +17,7 @@ for "_i" from 0 to (count _input) -1 do {
     _q = (_i + 0) % 8;
     _w = (_i + 1) % 8;
     _e = (_i + 2) % 8;
-    _r = (_i + 3) % 8
+    _r = (_i + 3) % 8;
     _s = _secret select (_i % _slen);
 
     _a = (_result select _q) * (_result select _w) * (_input select _i);

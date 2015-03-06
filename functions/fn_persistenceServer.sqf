@@ -6,11 +6,11 @@
 * Output: Saves above to profileNamespace
 */
 if !(isServer) exitWith {diag_log "[Persistence] - This function is designed for servers only.";};
-private ['_persistenceData','_varNames','_loadData','_missionIntro','_missionAuthor','_missionLoadName','_argsArray',];
+private ['_persistenceData','_varNames','_loadData','_missionIntro','_missionAuthor','_missionLoadName','_argsArray'];
 _persistenceData = profileNamespace getVariable "RETR_persistence";
 _varNames = ["mission","serverSalt","hash","date"];
 _loadData = "";
-if (isNil _persistenceData) then {//RETR_perstistence has never been run
+if (isNil _persistenceData) then {//RETR_persistence has never been run
 	profileNameSpace setVariable ["RETR_persitenceServer",_varNames];
 	for "_i" from 0 to (count _persistenceData) -1 do {
 		private "_xData";
@@ -38,8 +38,8 @@ if (!_loadData) then {
 	serverSalt = floor(random 1000);
 	serverHash = ceil(random 1000);
 	publicVariable "serverSalt";
-	publicVariable "serverHash"
-	waitUntil{!isNil ("serverSalt" && "serverHash");};
+	publicVariable "serverHash";
+	waitUntil{!isNil ("serverSalt");!isNil("serverHash");};
 	for "_i" from 0 to (count _argsArray) -2 do {
 		_persistenceVarX = _persistenceData select _i;
 		profileNamespace setVariable [_persistenceVarX,_argsArray select _i];
@@ -52,8 +52,8 @@ if (!_loadData) then {
 	};
 	serverSalt = _serverSaltData;
 	publicVariable "serverSalt";
-	serverHash = _serverHashData;
-	publicVariable "_serverHashData";
+	serverHash = serverHashData;
+	publicVariable "serverHash";
 	setDate _dateData;
 };
 //Update date once per hour

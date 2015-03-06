@@ -6,7 +6,7 @@
 * Output: Saves data to profileNamespace in array same as above.
 */
 private ["_persistenceVarName", "_persistenceData", "_varNames", "_savingX", "_saving", "_i", "_xData", "_missionName", "_missionIntro", "_missionLoadName", "_missionAuthor", "_playerUID", "_missionCheck", "_savingPosition", "_tmp", "_positionData", "_savingGear", "_gearData", "_savingSettings", "_settingsData", "_savingGroup", "_groupData", "_savingVehicle", "_vehicleData", "_savingMedical", "_medicalData", "_savingHash", "_hashPart", "_hashData", "_persistenceVarX"];
-_persistenceVarName = str(toArray(format["RETR_persitance_%1",getPlayerUID]));
+_persistenceVarName =  toArray str format["RETR_persistence_%1",getPlayerUID player];
 _persistenceData = profileNamespace getVariable _persistenceVarName;
 _varNames = ["Position","Gear","Settings","Group","Vehicle","Medical","Hash"];
 //Define array if it doesn't exist
@@ -15,10 +15,10 @@ if (isNil _persistenceVarName) then {
 	profileNameSpace setVariable [_persistenceVarName,_persistenceData];
 };
 //Lazier way to define variables
-for "_i" from 0 to (count _varNames) -1} do {
+for "_i" from 0 to (count _varNames) -1 do {
 	private ["_savingX","_xData"];
-	_savingX = format["_saving%1",if !(isNil _this select _i) then { _this select _i;}else {_varNames select _i;};];
-	missionNamespace setVariable [_savingX, if !(isNil _this select _i) then { _this select _i;}else {_varNames select 0 _i;};];
+	_savingX = format["_saving%1",{if(isNil _this select _i) then {_varNames select _i;}else {_this select _i;};}];
+	missionNamespace setVariable [_savingX,{if(isNil _this select _i) then {_varNames select _i;}else {_this select _i;};}];
 	_xData = format["_%1Data",toLower _varNames select _i];
 	missionNamespace setVariable [_xData, []];
 };
@@ -40,7 +40,7 @@ while {_savingPosition} do {
 	_tmp = getPosATL player;
 	_tmp = _tmp pushBack _playerUID;
 	_tmp = toArray str _tmp;
-	{_positionData pushBack (_x * serverSalt);} forEach _tmp
+	{_positionData pushBack (_x * serverSalt);} forEach _tmp;
 	sleep 2;
 };
 while {_savingGear} do {
