@@ -10,7 +10,7 @@ private ['_persistenceData','_varNames','_loadData','_missionIntro','_missionAut
 _persistenceData = profileNamespace getVariable "RETR_persistence";
 _varNames = ["mission","serverSalt","hash","date"];
 _loadData = "";
-if (isNil _persistenceData) then {//RETR_persistence has never been run
+if (isNil "_persistenceData") then {//RETR_persistence has never been run
 	profileNameSpace setVariable ["RETR_persitenceServer",_varNames];
 	for "_i" from 0 to (count _persistenceData) -1 do {
 		private "_xData";
