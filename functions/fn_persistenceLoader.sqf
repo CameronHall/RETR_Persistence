@@ -11,7 +11,7 @@ _persistenceData = profileNamespace getVariable _persistenceVarName;
 _varNames = ["Position","Gear","Settings","Group","Vehicle","Medical","Hash"];
 _tamperedData = format["%1's persistence data has been tampered with. \n Resetting %1's persitence data.", name player];
 _argsArray = [3,(count _vehicleData -1),2,1,(count _medicalData) -1,1];
-if(isNil _persistenceData) exitWith {
+if(isNil "_persistenceData") exitWith {
 	diag_log format["[Persistence] - %1 has no persitance data available for the current mission",name player];
 	_this call RETR_fnc_persistenceSaver;
 };
@@ -41,15 +41,15 @@ _hashDataNew = [];
 //Lazier way to define variables
 for "_i" from 0 to (count _this) -2 do {
 	private ["_savingX","_xData","_tmp","_hashPart","_hashX"];
-	_savingX = format["_saving%1",{if(isNil _this select _i) then {_varNames select _i;}else {_this select _i;};}];
-	missionNamespace setVariable [_savingX,{if(isNil _this select _i) then {_varNames select _i;}else {_this select _i;};}];
+	_savingX = format["_saving%1",{if(isNil {_this select _i}) then {_varNames select _i;}else {_this select _i;};}];
+	missionNamespace setVariable [_savingX,{if(isNil {_this select _i}) then {_varNames select _i;}else {_this select _i;};}];
 	_xData = format["_%1Data",toLower _this select _i];
 	_tmp = [];
 	//Divide saved array data by serverSalt
 	{_tmp pushBack (_x / serverSalt);} forEach _persistenceData select _i + 1;
 	missionNamespace setVariable [_tmp,{call compile _persistenceData select _i + 1;}];
 	//Concatonate all saved data so we can save the hash
-	if(!isNil _xData && _savingHash) then {
+	if(!isNil "_xData" && _savingHash) then {
 		_hashPart = [_xData, serverHash] call RETR_fnc_dataHash;
 		_hashDataNew pushBack _hashPart;
 	};
@@ -88,7 +88,7 @@ if(_savingGroup) then {
 	diag_log format ["%1 assigned to %2", name player, _groupData];
 };
 if(_savingVehicle) then {
-	if !(isNil _vehicleData) then {
+	if !(isNil "_vehicleData") then {
 		diag_log format ["%1 is in a vehicle, assigning slot", name player];
 		private "_vehicle";
 		_vehicle = _this select 0;
