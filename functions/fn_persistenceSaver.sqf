@@ -10,7 +10,7 @@ _persistenceVarName =  toArray str format["RETR_persistence_%1",getPlayerUID pla
 _persistenceData = profileNamespace getVariable _persistenceVarName;
 _varNames = ["Position","Gear","Settings","Group","Vehicle","Medical","Hash"];
 //Define array if it doesn't exist
-if (isNil _persistenceVarName) then {
+if (isNil "_persistenceVarName") then {
 	_persistenceData = ["authenticate","position","gear","misc","group",nil,"cse"];
 	profileNameSpace setVariable [_persistenceVarName,_persistenceData];
 };
