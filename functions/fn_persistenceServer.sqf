@@ -39,7 +39,7 @@ if (!_loadData) then {
 	serverHash = ceil(random 1000);
 	publicVariable "serverSalt";
 	publicVariable "serverHash";
-	waitUntil{!isNil ("serverSalt");!isNil("serverHash");};
+	waitUntil{!isNil "serverSalt" && !isNil "serverHash";};
 	for "_i" from 0 to (count _argsArray) -2 do {
 		_persistenceVarX = _persistenceData select _i;
 		profileNamespace setVariable [_persistenceVarX,_argsArray select _i];
