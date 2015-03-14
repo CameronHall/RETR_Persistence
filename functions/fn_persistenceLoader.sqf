@@ -41,8 +41,8 @@ _hashDataNew = [];
 //Lazier way to define variables
 for "_i" from 0 to (count _this) -2 do {
 	private ["_savingX","_xData","_tmp","_hashPart","_hashX"];
-	_savingX = format["_saving%1",{if(isNil {_this select _i}) then {_varNames select _i;}else {_this select _i;};}];
-	missionNamespace setVariable [_savingX,{if(isNil {_this select _i}) then {_varNames select _i;}else {_this select _i;};}];
+	_savingX = format["_saving%1",{if({isNil _this select _i}) then {_varNames select _i;}else {_this select _i;};}];
+	missionNamespace setVariable [_savingX,{if({isNil _this select _i}) then {_varNames select _i;}else {_this select _i;};}];
 	_xData = format["_%1Data",toLower _this select _i];
 	_tmp = [];
 	//Divide saved array data by serverSalt
