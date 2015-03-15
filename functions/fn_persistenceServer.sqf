@@ -48,7 +48,7 @@ if (!_loadData) then {
 } else {//If data exists then load it
 	//If data is not for the current mission then delete saved data and restart the function
 	waitUntil{!isNil "_missionData"};
-	if(_missionDataCurrent != _missionData) exitWith {
+	if(_missionDataCurrent isEqualTo _missionData) exitWith {
 		profileNameSpace setVariable ["RETR_persistenceServer",nil];
 		call RETR_fnc_persistenceServer;
 	};
