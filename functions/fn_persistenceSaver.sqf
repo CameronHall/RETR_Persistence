@@ -79,8 +79,8 @@ while {_savingVehicle} do {
 while {_savingMedical} do {
 	private ["_tmp","_medicalData"];
 	_tmp = player call cse_fnc_getAllSetVariables;
-	_medicalData = toArray str(_medicalData pushBack _playerUID);
 	{_medicalData pushBack (_x * serverSalt);} forEach _tmp;
+	_medicalData = toArray str[_medicalData, _playerUID];
 	sleep 2;
 };
 while {_savingHash} do {
