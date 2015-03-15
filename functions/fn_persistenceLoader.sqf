@@ -6,7 +6,7 @@
 * 	Output: Applying all the missionData from the profileNamespace, start the save function.
 */
 private ["_persistenceData", "_persistenceVarName", "_varNames", "_tamperedData", "_argsArray", "_vehicleData", "_medicalData", "_missionName", "_missionIntro", "_missionLoadName", "_missionAuthor", "_playerUID", "_authenticationData", "_persitanceData", "_isHashOn", "_savingHash", "_hashDataNew", "_hashDataCompare", "_savingX", "_saving", "_i", "_xData", "_tmp", "_hashPart", "_hashX", "_hash", "_hashCheck1", "_hashCheck2", "_hashCheck3", "_hashcheck4", "_hashCheck5", "_hashCheck6", "_xSaving", "_savingPosition", "_positionData", "_gearData", "_savingSettings", "_viewDistanceData", "_terrainGridData", "_savingGroup", "_groupData", "_savingVehicle", "_vehicle", "_vehicle_role", "_unit", "_path", "_savingCSE", "_medicalStateData"];
-_persistenceVarName =  toArray str format["RETR_persistence_%1",getPlayerUID player];
+_persistenceVarName =  format["RETR_persistence_%1",getPlayerUID player];
 _persistenceData = profileNamespace getVariable _persistenceVarName;
 _varNames = ["Position","Gear","Settings","Group","Vehicle","Medical","Hash"];
 _tamperedData = format["%1's persistence data has been tampered with. \n Resetting %1's persitence data.", name player];
