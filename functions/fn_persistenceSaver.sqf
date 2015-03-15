@@ -6,7 +6,7 @@
 * Output: Saves data to profileNamespace in array same as above.
 */
 private ["_persistenceVarName", "_persistenceData", "_varNames", "_savingX", "_saving", "_i", "_xData", "_missionName", "_missionIntro", "_missionLoadName", "_missionAuthor", "_playerUID", "_missionCheck", "_savingPosition", "_tmp", "_positionData", "_savingGear", "_gearData", "_savingSettings", "_settingsData", "_savingGroup", "_groupData", "_savingVehicle", "_vehicleData", "_savingMedical", "_medicalData", "_savingHash", "_hashPart", "_hashData", "_persistenceVarX"];
-_persistenceVarName =  toArray str format["RETR_persistence_%1",getPlayerUID player];
+_persistenceVarName = format["RETR_persistence_%1",getPlayerUID player];
 _persistenceData = profileNamespace getVariable _persistenceVarName;
 _varNames = ["Position","Gear","Settings","Group","Vehicle","Medical","Hash"];
 //Define array if it doesn't exist
