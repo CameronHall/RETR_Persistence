@@ -5,6 +5,8 @@
 * Input: [missionData, positionData, gearData, settingData, groupData, vehicleData, medicalData, hashData]
 * Output: Saves data to profileNamespace in array same as above.
 */
+diag_log "[Persistence] - PERSISTENCE SAVER INITIALISED...";
+diag_log format["[Persistence] - Saving %1",_this];
 private ["_persistenceVarName", "_persistenceData", "_varNames", "_savingX", "_saving", "_i", "_xData", "_missionName", "_missionIntro", "_missionLoadName", "_missionAuthor", "_playerUID", "_missionCheck", "_savingPosition", "_tmp", "_positionData", "_savingGear", "_gearData", "_savingSettings", "_settingsData", "_savingGroup", "_groupData", "_savingVehicle", "_vehicleData", "_savingMedical", "_medicalData", "_savingHash", "_hashPart", "_hashData", "_persistenceVarX"];
 _persistenceVarName = format["RETR_persistence_%1",getPlayerUID player];
 _persistenceData = profileNamespace getVariable _persistenceVarName;
@@ -38,28 +40,36 @@ with profileNamespace do {
 while {_savingPosition} do {
 	private ["_tmp","_positionData"];
 	_tmp = getPosATL player;
+	diag_log format["[Persistence] - %1's position has been saved to a variable", name player];
 	_tmp = _tmp pushBack _playerUID;
 	_tmp = toArray str _tmp;
 	{_positionData pushBack (_x * serverSalt);} forEach _tmp;
+	diag_log format["[Persistence] - %1's position has been encrypted", name player];
 	sleep 2;
 };
 while {_savingGear} do {
 	private ["_tmp","_gearData"];
 	_tmp = [player, ["repetitive"]] call aero_fnc_get_loadout;
-	_tmp = toArray str(_tmp pushBack _playerUID);
+	diag_log format["[Persistence] - %1's gear has been saved to a variable", name player];
+	_tmp = toArray str[_tmp, _playerUID];
 	{_gearData pushBack (_x * serverSalt);} forEach _tmp;
+	diag_log format["[Persistence] - %1's gear has been encrypted", name player];
 	sleep 10;
 };
 while {_savingSettings} do {
 	private ["_tmp","_settingsData"]; 
 	_tmp = toArray str[viewDistance, {if (isNil "terraindetail") then { 1; } else { terraindetail;},_playerUID];
+	diag_log format["[Persistence] - %1's settings has been saved to a variable", name player];
 	{_settingsData pushBack (_x * serverSalt);} forEach _tmp;
+	diag_log format["[Persistence] - %1's settings has been encrypted", name player];
 	sleep 900;
 };
 while {_savingGroup} do {
 	private ["_tmp","_groupData"]; 
 	_tmp = [group player, _playerUID];
+	diag_log format["[Persistence] - %1's group has been saved to a variable", name player];
 	{_groupData pushBack (_x * serverSalt);} forEach _tmp;
+	diag_log format["[Persistence] - %1's group has been encrypted", name player];
 	sleep 180;
 };
 while {_savingVehicle} do {
@@ -67,21 +77,35 @@ while {_savingVehicle} do {
 	if (vehicle player != player) then {
 		while {true} do {
 			_tmp = toArray str[assignedVehicleRole player,_playerUID];
+			diag_log format["[Persistence] - %1's vehicle position has been saved to a variable", name player];
 			{_vehicleData pushBack (_x * serverSalt);} forEach _tmp;
+			diag_log format["[Persistence] - %1's group has been encrypted", name player];
 			sleep 8;
 		};
 	} else {
 		_tmp = toArray str(_vehicleData = nil);
+		diag_log format["[Persistence] - %1's vehicle position has been saved to a variable", name player];
 		{_vehicleData * serverSalt);} forEach _tmp;
+		diag_log format["[Persistence] - %1's group has been encrypted", name player];
 	};
 	sleep 10;
 };
 while {_savingMedical} do {
+<<<<<<< HEAD
+    private ["_tmp","_medicalData"];
+    _tmp = player call cse_fnc_getAllSetVariables;
+    diag_log format["[Persistence] - %1's medical state has been saved to a variable", name player];
+    _medicalData = toArray str[_medicalData, _playerUID];
+    {_medicalData pushBack (_x * serverSalt);} forEach _tmp;
+    diag_log format["[Persistence] - %1's medical state has been encrypted", name player];
+    sleep 2;
+=======
 	private ["_tmp","_medicalData"];
 	_tmp = player call cse_fnc_getAllSetVariables;
 	{_medicalData pushBack (_x * serverSalt);} forEach _tmp;
 	_medicalData = toArray str[_medicalData, _playerUID];
 	sleep 2;
+>>>>>>> origin/master
 };
 while {_savingHash} do {
   	for "_i" from 0 to (count _varNames) -2 do {
@@ -103,9 +127,10 @@ while {true} do {
 			private ["_xData","_savingX","_persistenceDataX"];
 			_xData = format["_%1Data",toLower _varNames select _i];
 			_savingX = format["_saving%1",_varNames select _i];
-			_persistenceVarX = _persistenceVarName select _i + 1;
-			if(_savingX && _xData != _persistenceVarX) then {
+			_persistenceVarX = _persistenceVarName select _i + 1;// +1 so we don't overwrite the authentication data
+			if(_savingX && _xData != _persistenceVarX) then {// make sure we aren't overwriting the same thing
 				_persistenceVarX = reverse _xData;
+				diag_log format["[Persistence] - %1 was saved to %2's profileNamespace", _xData, name player];
 			};
 		};
 	/*

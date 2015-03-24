@@ -10,6 +10,7 @@ private ['_persistenceData','_varNames','_loadData','_missionIntro','_missionAut
 _persistenceData = profileNamespace getVariable "RETR_persistenceServer";
 _varNames = ["mission","serverSalt","hash","date"];
 _loadData = "";
+_missionData = [];
 if (isNil "_persistenceData") then {//RETR_persistence has never been run
 	profileNameSpace setVariable ["RETR_persistenceServer",_varNames];
 	_persistenceData = profileNamespace getVariable "RETR_persistenceServer";
@@ -48,7 +49,11 @@ if (!_loadData) then {
 } else {//If data exists then load it
 	//If data is not for the current mission then delete saved data and restart the function
 	waitUntil{!isNil "_missionData"};
+<<<<<<< HEAD
+	if !(_missionDataCurrent isEqualTo _missionData) exitWith {
+=======
 	if(_missionDataCurrent isEqualTo _missionData) exitWith {
+>>>>>>> origin/master
 		profileNameSpace setVariable ["RETR_persistenceServer",nil];
 		call RETR_fnc_persistenceServer;
 	};
@@ -60,7 +65,9 @@ if (!_loadData) then {
 };
 //Update date once per hour
 while {true} do {
-	_persistenceVarX = _persistenceData select 3;
-	profileNamespace setVariable [_persistenceVarX,date];
+	with profileNamespace do {
+     _persistenceVarX = _persistenceData select 3;
+    _persistenceVarX = date;
+};
 	sleep 3600;
 };

@@ -5,15 +5,17 @@
 * 	Input: missionData from profileNamespace 
 * 	Output: Applying all the missionData from the profileNamespace, start the save function.
 */
+diag_log "[Persistence] - PERSISTENCE LOADER INITIALISED...";
+diag_log format["[Persistence] - Saving %1",_this];
 private ["_persistenceData", "_persistenceVarName", "_varNames", "_tamperedData", "_argsArray", "_vehicleData", "_medicalData", "_missionName", "_missionIntro", "_missionLoadName", "_missionAuthor", "_playerUID", "_authenticationData", "_persitanceData", "_isHashOn", "_savingHash", "_hashDataNew", "_hashDataCompare", "_savingX", "_saving", "_i", "_xData", "_tmp", "_hashPart", "_hashX", "_hash", "_hashCheck1", "_hashCheck2", "_hashCheck3", "_hashcheck4", "_hashCheck5", "_hashCheck6", "_xSaving", "_savingPosition", "_positionData", "_gearData", "_savingSettings", "_viewDistanceData", "_terrainGridData", "_savingGroup", "_groupData", "_savingVehicle", "_vehicle", "_vehicle_role", "_unit", "_path", "_savingCSE", "_medicalStateData"];
 _persistenceVarName =  format["RETR_persistence_%1",getPlayerUID player];
 _persistenceData = profileNamespace getVariable _persistenceVarName;
 _varNames = ["Position","Gear","Settings","Group","Vehicle","Medical","Hash"];
 _tamperedData = format["%1's persistence data has been tampered with. \n Resetting %1's persitence data.", name player];
-_argsArray = [3,(count _vehicleData -1),2,1,(count _medicalData) -1,1];
+_argsArray = [3,2,2,1,1,1,1];
 if(isNil "_persistenceData") exitWith {
 	diag_log format["[Persistence] - %1 has no persitance data available for the current mission",name player];
-	_this call RETR_fnc_persistenceSaver;
+	[_this] call RETR_fnc_persistenceSaver;
 };
 //Check if Data is for this mission
 _missionName = getText(missionConfigFile >> "onLoadMission");
@@ -26,7 +28,7 @@ _authenticationData =  toArray str[_missionName,_missionIntro,_missionLoadName,_
 if (_persitanceData select 0 != _authenticationData) exitWith {
 	profileNamespace setVariable [_persistenceData,nil];
 	diag_log format["[Persistence] - %1 loaded invalid Persitance Data Loaded", name player];
-	_this call RETR_fnc_persistenceSaver;
+	[_this] call RETR_fnc_persistenceSaver;
 };
 //Check if data hash is enabled
 _isHashOn = _this select 0 find 'Hash';
@@ -68,7 +70,7 @@ if((_hashCheck1 || _hashCheck2 || _hashCheck3 || _hashcheck4 || _hashCheck5 || _
 	profileNamespace setVariable [_persistenceData,nil];
 	diag_log _tamperedData;
 	//[_tamperedData, systemChat,nil] call BIS_fnc_MP;
-	_this call RETR_fnc_persistenceSaver;
+	[_this] call RETR_fnc_persistenceSaver;
 };
 //If we are loading _xSaving data
 if(_savingPosition) then {
