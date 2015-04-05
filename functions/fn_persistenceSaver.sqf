@@ -91,7 +91,6 @@ while {_savingVehicle} do {
 	sleep 10;
 };
 while {_savingMedical} do {
-<<<<<<< HEAD
     private ["_tmp","_medicalData"];
     _tmp = player call cse_fnc_getAllSetVariables;
     diag_log format["[Persistence] - %1's medical state has been saved to a variable", name player];
@@ -99,13 +98,11 @@ while {_savingMedical} do {
     {_medicalData pushBack (_x * serverSalt);} forEach _tmp;
     diag_log format["[Persistence] - %1's medical state has been encrypted", name player];
     sleep 2;
-=======
 	private ["_tmp","_medicalData"];
 	_tmp = player call cse_fnc_getAllSetVariables;
 	{_medicalData pushBack (_x * serverSalt);} forEach _tmp;
 	_medicalData = toArray str[_medicalData, _playerUID];
 	sleep 2;
->>>>>>> origin/master
 };
 while {_savingHash} do {
   	for "_i" from 0 to (count _varNames) -2 do {

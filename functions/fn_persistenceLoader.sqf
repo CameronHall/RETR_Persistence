@@ -31,7 +31,7 @@ if (_persitanceData select 0 != _authenticationData) exitWith {
 	[_this] call RETR_fnc_persistenceSaver;
 };
 //Check if data hash is enabled
-_isHashOn = _this select 0 find 'Hash';
+_isHashOn = _this find 'Hash';
 if(_isHashOn != -1) then {
 	missionNamespace setVariable ['_savingHash',true];
 	missionNamespace setVariable ['_hashDataNew', []];
@@ -81,9 +81,12 @@ if(_savingPosition) then {
 	diag_log format["[Persistence] - %1 recieved the following gear %2",name player, _gearData];
 };
 if(_savingSettings) then {
+	private ['_viewDistanceData','_terrainGridData'];
+	_viewDistanceData = _settingsData select 0;
+	_terrainGridData = _settingsData select 1;
 	setViewDistance _viewDistanceData;
 	setTerrainGrid _terrainGridData;
-	diag_log format ["%1's terrain and view distance settings are %2",name player, _terrainGridData];
+	diag_log format ["%1's terrain settngs are %2 and view distance setting is %3m",name player, _terrainGridData,_viewDistanceData];
 };
 if(_savingGroup) then {
 	player joinAsSilent _groupData;
@@ -93,7 +96,7 @@ if(_savingVehicle) then {
 	if !(isNil "_vehicleData") then {
 		diag_log format ["%1 is in a vehicle, assigning slot", name player];
 		private "_vehicle";
-		_vehicle = _this select 0;
+		_vehicle = _vehicleData select 0;
 		if (typeName _vehicle != "STRING") then {
 			_vehicle_role = _this select 1;
 			if (count _vehicle_role > 0) then {
