@@ -10,7 +10,6 @@ private ['_persistenceData','_varNames','_loadData','_missionIntro','_missionAut
 _persistenceData = profileNamespace getVariable "RETR_persistenceServer";
 _varNames = ["mission","serverSalt","hash","date"];
 _loadData = "";
-_missionData = [];
 if (isNil "_persistenceData") then {//RETR_persistence has never been run
 	profileNameSpace setVariable ["RETR_persistenceServer",_varNames];
 	_persistenceData = profileNamespace getVariable "RETR_persistenceServer";
@@ -33,8 +32,20 @@ _missionLoadName = getText(missionConfigFile >> "onLoadName");
 _missionAuthor = getText(missionConfigFile >> "author");
 _missionDataCurrent = [_missionName,_missionIntro,_missionLoadName,_missionAuthor];
 
-//If no data has been saved 
-if (!_loadData) then {
+//If data has been saved 
+if (_loadData) then {
+	//If data is not for the current mission then delete saved data and restart the function
+	waitUntil{!isNil "_missionData"};
+	if !(_missionDataCurrent isEqualTo _missionData) exitWith {
+		profileNameSpace setVariable ["RETR_persistenceServer",nil];
+		call RETR_fnc_persistenceServer;
+	};
+	serverSalt = _serverSaltData;
+	publicVariable "serverSalt";
+	serverHash = _serverHashData;
+	publicVariable "serverHash";
+	setDate _dateData;
+} else {//If no data has been saved
 	//Data to save
 	serverSalt = floor(random 1000);
 	serverHash = ceil(random 1000);
@@ -45,29 +56,13 @@ if (!_loadData) then {
 	for "_i" from 0 to (count _argsArray) -2 do {
 		_persistenceVarX = _persistenceData select _i;
 		profileNamespace setVariable [_persistenceVarX,_argsArray select _i];
-	};
-} else {//If data exists then load it
-	//If data is not for the current mission then delete saved data and restart the function
-	waitUntil{!isNil "_missionData"};
-<<<<<<< HEAD
-	if !(_missionDataCurrent isEqualTo _missionData) exitWith {
-=======
-	if(_missionDataCurrent isEqualTo _missionData) exitWith {
->>>>>>> origin/master
-		profileNameSpace setVariable ["RETR_persistenceServer",nil];
-		call RETR_fnc_persistenceServer;
-	};
-	serverSalt = _serverSaltData;
-	publicVariable "serverSalt";
-	serverHash = serverHashData;
-	publicVariable "serverHash";
-	setDate _dateData;
+	};	
 };
 //Update date once per hour
 while {true} do {
 	with profileNamespace do {
-     _persistenceVarX = _persistenceData select 3;
-    _persistenceVarX = date;
-};
+    	_persistenceVarX = _persistenceData select 3;
+    	_persistenceVarX = date;
+	};
 	sleep 3600;
 };
