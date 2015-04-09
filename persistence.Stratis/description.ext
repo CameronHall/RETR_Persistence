@@ -1,0 +1,6 @@
+enabledebugconsole = 2;
+onLoadMission = "Persistence Test v0.01";
+onLoadIntro = "RETR_Persistence";
+onLoadName = "Stratis Test 07/04/15";
+author = "CameronHall - Retra";
+#include "functions\functions.hpp"
